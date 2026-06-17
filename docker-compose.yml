@@ -46,4 +46,6 @@ services:
       FACEID_LIVENESS_THRESHOLD: "0.7"
       UNIFACE_CACHE_DIR: /opt/uniface/models
       UNIFACE_MODEL_URL_REWRITE: ""
+      NVIDIA_VISIBLE_DEVICES: ${FACEID_GPU_DEVICES:-all}
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
     gpus: all

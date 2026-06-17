@@ -18,6 +18,14 @@ GPU:
 docker compose --profile gpu up faceid-gpu
 ```
 
+GPU defaults to all visible NVIDIA devices. To select specific devices:
+
+```bash
+FACEID_GPU_DEVICES=0 docker compose --profile gpu up faceid-gpu
+FACEID_GPU_DEVICES=0,1 docker compose --profile gpu up faceid-gpu
+FACEID_GPU_DEVICES=all docker compose --profile gpu up faceid-gpu
+```
+
 The service listens on `http://127.0.0.1:8100`.
 
 The Docker image preloads the default UniFace models during build. This makes download failures fail the build instead of appearing on the first login request.
@@ -38,6 +46,7 @@ FACEID_MAX_IMAGE_BYTES=8388608
 FACEID_PRELOAD_MODE=all
 UNIFACE_CACHE_DIR=/opt/uniface/models
 UNIFACE_MODEL_URL_REWRITE=
+FACEID_GPU_DEVICES=all
 ```
 
 `FACEID_DEVICE=gpu` selects `CUDAExecutionProvider` with CPU fallback. `FACEID_DEVICE=cpu` forces `CPUExecutionProvider`.
