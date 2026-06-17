@@ -14,9 +14,6 @@
   </p>
 
   <p>
-    <a href="https://hub.docker.com/r/dadastory/casdoor-faceid-service">
-      <img src="https://img.shields.io/docker/pulls/dadastory/casdoor-faceid-service?style=flat-square&color=brightgreen" alt="Docker Pulls">
-    </a>
     <a href="./LICENSE">
       <img src="https://img.shields.io/badge/license-Apache--2.0-orange?style=flat-square" alt="License">
     </a>
@@ -155,19 +152,19 @@ Expected response:
 Use all visible GPUs:
 
 ```bash
-FACEID_GPU_DEVICES=all docker compose --profile gpu up -d faceid-gpu
+FACEID_GPU_DEVICES=all docker compose --profile gpu up -d faceid-gpu --build
 ```
 
 Use one GPU:
 
 ```bash
-FACEID_GPU_DEVICES=0 docker compose --profile gpu up -d faceid-gpu
+FACEID_GPU_DEVICES=0 docker compose --profile gpu up -d faceid-gpu --build
 ```
 
 Use multiple GPUs:
 
 ```bash
-FACEID_GPU_DEVICES=0,1 docker compose --profile gpu up -d faceid-gpu
+FACEID_GPU_DEVICES=0,1 docker compose --profile gpu up -d faceid-gpu --build
 ```
 
 The service still starts one process. Multiple visible GPUs mainly control which devices ONNX Runtime may use.
