@@ -14,9 +14,6 @@
   </p>
 
   <p>
-    <a href="https://hub.docker.com/r/dadastory/casdoor-faceid-service">
-      <img src="https://img.shields.io/docker/pulls/dadastory/casdoor-faceid-service?style=flat-square&color=brightgreen" alt="Docker Pulls">
-    </a>
     <a href="./LICENSE">
       <img src="https://img.shields.io/badge/license-Apache--2.0-orange?style=flat-square" alt="License">
     </a>
@@ -124,13 +121,13 @@ cp .env.example .env
 CPU 启动：
 
 ```bash
-docker compose --profile cpu up -d --build faceid-cpu
+docker compose --profile cpu up -d --build faceid-cpu --build
 ```
 
 GPU 启动：
 
 ```bash
-docker compose --profile gpu up -d --build faceid-gpu
+docker compose --profile gpu up -d --build faceid-gpu --build
 ```
 
 检查服务状态：
