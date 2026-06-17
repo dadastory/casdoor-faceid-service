@@ -5,6 +5,8 @@ from typing import Sequence
 
 from .config import Settings
 
+GITHUB_URL_PREFIX = "https://github.com/"
+
 
 def parse_url_rewrites(value: str | None) -> list[tuple[str, str]]:
     if not value:
@@ -26,6 +28,26 @@ def parse_url_rewrites(value: str | None) -> list[tuple[str, str]]:
     return rules
 
 
+def github_proxy_url_rewrites(value: str | None) -> list[tuple[str, str]]:
+    if not value:
+        return []
+
+    proxy_prefix = value.strip()
+    if not proxy_prefix:
+        return []
+    if not proxy_prefix.endswith("/"):
+        proxy_prefix = f"{proxy_prefix}/"
+
+    return [(GITHUB_URL_PREFIX, f"{proxy_prefix}{GITHUB_URL_PREFIX}")]
+
+
+def get_model_url_rewrites(value: str | None, github_proxy: str | None) -> list[tuple[str, str]]:
+    rules = parse_url_rewrites(value)
+    if rules:
+        return rules
+    return github_proxy_url_rewrites(github_proxy)
+
+
 def rewrite_model_url(url: str, rules: Sequence[tuple[str, str]]) -> str:
     for old_prefix, new_prefix in rules:
         if url.startswith(old_prefix):
@@ -33,8 +55,8 @@ def rewrite_model_url(url: str, rules: Sequence[tuple[str, str]]) -> str:
     return url
 
 
-def apply_model_url_rewrites(value: str | None) -> int:
-    rules = parse_url_rewrites(value)
+def apply_model_url_rewrites(value: str | None, github_proxy: str | None = None) -> int:
+    rules = get_model_url_rewrites(value, github_proxy)
     if not rules:
         return 0
 
@@ -87,7 +109,10 @@ def preload_models(settings: Settings, mode: str) -> dict[str, str]:
     import uniface
 
     uniface.set_cache_dir(settings.model_cache_dir)
-    apply_model_url_rewrites(os.environ.get("UNIFACE_MODEL_URL_REWRITE"))
+    apply_model_url_rewrites(
+        os.environ.get("UNIFACE_MODEL_URL_REWRITE"),
+        os.environ.get("UNIFACE_GITHUB_PROXY"),
+    )
     model_names = get_preload_model_names(settings, components)
     downloaded = uniface.download_models(model_names)
     return {model.value: path for model, path in downloaded.items()}

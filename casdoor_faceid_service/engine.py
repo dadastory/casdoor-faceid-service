@@ -12,7 +12,10 @@ from .preload import apply_model_url_rewrites
 class UniFaceEngine:
     def __init__(self, settings: Settings):
         self.settings = settings
-        apply_model_url_rewrites(os.environ.get("UNIFACE_MODEL_URL_REWRITE"))
+        apply_model_url_rewrites(
+            os.environ.get("UNIFACE_MODEL_URL_REWRITE"),
+            os.environ.get("UNIFACE_GITHUB_PROXY"),
+        )
         self.detector = self._build_detector()
         self.recognizer = self._build_recognizer()
         self.spoofer = None

@@ -5,22 +5,32 @@ services:
     build:
       context: .
       args:
+        BASE_IMAGE: ${FACEID_CPU_BASE_IMAGE:-python:3.11-slim}
         UNIFACE_EXTRA: cpu
-        APT_MIRROR: http://mirrors.aliyun.com/debian
-        APT_SECURITY_MIRROR: http://mirrors.aliyun.com/debian-security
-        UV_DEFAULT_INDEX: https://mirrors.aliyun.com/pypi/simple/
-        FACEID_PRELOAD_MODE: all
-        UNIFACE_MODEL_URL_REWRITE: ""
-    image: casdoor-faceid-service:cpu
+        APT_MIRROR: ${APT_MIRROR:-http://mirrors.aliyun.com/debian}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-http://mirrors.aliyun.com/debian-security}
+        UBUNTU_MIRROR: ${UBUNTU_MIRROR:-http://mirrors.aliyun.com/ubuntu}
+        UBUNTU_SECURITY_MIRROR: ${UBUNTU_SECURITY_MIRROR:-http://mirrors.aliyun.com/ubuntu}
+        UV_DEFAULT_INDEX: ${UV_DEFAULT_INDEX:-https://mirrors.aliyun.com/pypi/simple/}
+        FACEID_PRELOAD_MODE: ${FACEID_PRELOAD_MODE:-all}
+        UNIFACE_GITHUB_PROXY: ${UNIFACE_GITHUB_PROXY:-https://gh-proxy.org/}
+        UNIFACE_MODEL_URL_REWRITE: ${UNIFACE_MODEL_URL_REWRITE:-}
+    image: dadastory/casdoor-faceid-service:cpu
     ports:
-      - "8100:8100"
+      - "${FACEID_PORT:-8100}:8100"
     environment:
       FACEID_DEVICE: cpu
-      FACEID_ENABLE_LIVENESS: "false"
-      FACEID_SIMILARITY_THRESHOLD: "0.6"
-      FACEID_LIVENESS_THRESHOLD: "0.7"
-      UNIFACE_CACHE_DIR: /opt/uniface/models
-      UNIFACE_MODEL_URL_REWRITE: ""
+      FACEID_ENABLE_LIVENESS: ${FACEID_ENABLE_LIVENESS:-true}
+      FACEID_SIMILARITY_THRESHOLD: ${FACEID_SIMILARITY_THRESHOLD:-0.6}
+      FACEID_LIVENESS_THRESHOLD: ${FACEID_LIVENESS_THRESHOLD:-0.7}
+      FACEID_API_KEY: ${FACEID_API_KEY:-}
+      FACEID_DETECTOR: ${FACEID_DETECTOR:-retinaface}
+      FACEID_RECOGNIZER: ${FACEID_RECOGNIZER:-arcface}
+      FACEID_PARSER: ${FACEID_PARSER:-bisenet}
+      FACEID_MAX_IMAGE_BYTES: ${FACEID_MAX_IMAGE_BYTES:-8388608}
+      UNIFACE_CACHE_DIR: ${UNIFACE_CACHE_DIR:-/opt/uniface/models}
+      UNIFACE_GITHUB_PROXY: ${UNIFACE_GITHUB_PROXY:-https://gh-proxy.org/}
+      UNIFACE_MODEL_URL_REWRITE: ${UNIFACE_MODEL_URL_REWRITE:-}
 
   faceid-gpu:
     profiles:
@@ -28,22 +38,32 @@ services:
     build:
       context: .
       args:
+        BASE_IMAGE: ${FACEID_GPU_BASE_IMAGE:-nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04}
         UNIFACE_EXTRA: gpu
-        APT_MIRROR: http://mirrors.aliyun.com/debian
-        APT_SECURITY_MIRROR: http://mirrors.aliyun.com/debian-security
-        UV_DEFAULT_INDEX: https://mirrors.aliyun.com/pypi/simple/
-        FACEID_PRELOAD_MODE: all
-        UNIFACE_MODEL_URL_REWRITE: ""
-    image: casdoor-faceid-service:gpu
+        APT_MIRROR: ${APT_MIRROR:-http://mirrors.aliyun.com/debian}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-http://mirrors.aliyun.com/debian-security}
+        UBUNTU_MIRROR: ${UBUNTU_MIRROR:-http://mirrors.aliyun.com/ubuntu}
+        UBUNTU_SECURITY_MIRROR: ${UBUNTU_SECURITY_MIRROR:-http://mirrors.aliyun.com/ubuntu}
+        UV_DEFAULT_INDEX: ${UV_DEFAULT_INDEX:-https://mirrors.aliyun.com/pypi/simple/}
+        FACEID_PRELOAD_MODE: ${FACEID_PRELOAD_MODE:-all}
+        UNIFACE_GITHUB_PROXY: ${UNIFACE_GITHUB_PROXY:-https://gh-proxy.org/}
+        UNIFACE_MODEL_URL_REWRITE: ${UNIFACE_MODEL_URL_REWRITE:-}
+    image: dadastory/casdoor-faceid-service:gpu
     ports:
-      - "8100:8100"
+      - "${FACEID_PORT:-8100}:8100"
     environment:
       FACEID_DEVICE: gpu
-      FACEID_ENABLE_LIVENESS: "false"
-      FACEID_SIMILARITY_THRESHOLD: "0.6"
-      FACEID_LIVENESS_THRESHOLD: "0.7"
-      UNIFACE_CACHE_DIR: /opt/uniface/models
-      UNIFACE_MODEL_URL_REWRITE: ""
+      FACEID_ENABLE_LIVENESS: ${FACEID_ENABLE_LIVENESS:-true}
+      FACEID_SIMILARITY_THRESHOLD: ${FACEID_SIMILARITY_THRESHOLD:-0.6}
+      FACEID_LIVENESS_THRESHOLD: ${FACEID_LIVENESS_THRESHOLD:-0.7}
+      FACEID_API_KEY: ${FACEID_API_KEY:-}
+      FACEID_DETECTOR: ${FACEID_DETECTOR:-retinaface}
+      FACEID_RECOGNIZER: ${FACEID_RECOGNIZER:-arcface}
+      FACEID_PARSER: ${FACEID_PARSER:-bisenet}
+      FACEID_MAX_IMAGE_BYTES: ${FACEID_MAX_IMAGE_BYTES:-8388608}
+      UNIFACE_CACHE_DIR: ${UNIFACE_CACHE_DIR:-/opt/uniface/models}
+      UNIFACE_GITHUB_PROXY: ${UNIFACE_GITHUB_PROXY:-https://gh-proxy.org/}
+      UNIFACE_MODEL_URL_REWRITE: ${UNIFACE_MODEL_URL_REWRITE:-}
       NVIDIA_VISIBLE_DEVICES: ${FACEID_GPU_DEVICES:-all}
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
     gpus: all

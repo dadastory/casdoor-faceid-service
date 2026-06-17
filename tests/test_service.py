@@ -20,7 +20,7 @@ class FakeEngine:
 
 class FaceAnalysisServiceTest(unittest.TestCase):
     def test_compare_returns_best_match_across_registered_and_probe_images(self):
-        settings = Settings(similarity_threshold=0.6)
+        settings = Settings(enable_liveness=False, similarity_threshold=0.6)
         engine = FakeEngine([0.41, 0.63, 0.59, 0.88])
         service = FaceAnalysisService(engine, settings)
 
@@ -33,7 +33,7 @@ class FaceAnalysisServiceTest(unittest.TestCase):
         self.assertEqual(result["probeIndex"], 1)
 
     def test_compare_rejects_when_best_score_is_below_threshold(self):
-        settings = Settings(similarity_threshold=0.7)
+        settings = Settings(enable_liveness=False, similarity_threshold=0.7)
         engine = FakeEngine([0.69])
         service = FaceAnalysisService(engine, settings)
 
